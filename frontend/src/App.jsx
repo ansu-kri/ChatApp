@@ -15,8 +15,8 @@ function App() {
       <div className="absolute bottom-0 -right-4 size-96 bg-cyan-500 opacity-20 blur-[100px]" />
 
       <Routes>
-        <Route path="/" element={ <ChatPage />} />
-        <Route path="/login" element={ <LoginPage />} />
+        <Route path="/chatpage" element={ <ChatPage />} />
+        <Route path="/" element={ <LoginPage />} />
         <Route path="/signup" element={ <SignUpPage />} />
       </Routes>
 
