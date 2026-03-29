@@ -2,7 +2,8 @@ const generateToken = require("../lib/utils");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-const signup = async (req, res) => {
+// ==================== SIGNUP ====================
+exports.signup = async (req, res) => {
   const { fullName, email, password } = req.body;
   try {
     if (!fullName || !email || !password) {
@@ -34,9 +35,8 @@ const signup = async (req, res) => {
 
       res.status(201).json({
         _id: newUser._id,
-        fullName: newUser.email,
+        fullName: newUser.fullName,
         email: newUser.email,
-        profilePic: newUser.profilePic,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -47,4 +47,31 @@ const signup = async (req, res) => {
   }
 };
 
-module.exports = signup;
+//========================LOGIN==================
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: "All fields are required" });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid credentitals" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch) return res.status(400).json({ message: "Invalid credentitals" });
+
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      message :"Login successful",
+      token,
+      user:{
+        _id: user._id,
+        name: user.name,
+      }
+    })
+  } catch (error) {
+    console.error("Error in login:", error.message);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server error", error: error.message });
+   }
+}
+
