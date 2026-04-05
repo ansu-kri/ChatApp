@@ -1,13 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from "react-dom/client";
 import './index.css'
 import App from './App.jsx'
-import { BrowserRouter } from "react-router";
+import { store } from './app/store.js';
+import { Provider } from "react-redux";
+import { QueryClientProvider, QueryClient} from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
       <App />
-    </BrowserRouter>
-  </StrictMode>,
+      </BrowserRouter>
+    </QueryClientProvider>
+  </Provider>,
 )
