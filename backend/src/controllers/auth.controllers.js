@@ -65,7 +65,7 @@ exports.login = async (req, res) => {
       token,
       user:{
         _id: user._id,
-        name: user.name,
+        fullName: user.fullName,
       }
     })
   } catch (error) {
