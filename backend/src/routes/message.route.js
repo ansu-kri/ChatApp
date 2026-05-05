@@ -1,9 +1,16 @@
 const express = require('express');
-
 const router = express.Router();
+const messageController = require("../controllers/message.controllers");
+const { protectRoute } = require("../middleware/auth.middleware");
+const { messageLimiter } = require("../middleware/ratelimit.middleware");
 
-router.get("/send", (req,res) => {
-    res.send("Send Message endpoint");
-})
+
+//Channel messages
+router.get("/channel/:channelId", protectRoute, messageController.getChannelMessages);
+router.post("/channel/:channelId", protectRoute, messageLimiter, uploadToCloudinary.single("file"), messageController.sendChannelMessage);
+//Dm messages
+router.get("/dm/:userId",  protectRoute, messageController.getDMMessages);
+router.post("/dm/:userId", protectRoute, messageLimiter, upload.single("file"), messageController.sendDMMessage);
+//Message actions
 
 module.exports = router
