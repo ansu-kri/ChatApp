@@ -1,33 +1,37 @@
-import { XIcon } from "lucide-react";
+import { X } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import { useChatStore } from "../store/useChatStore";
 
-function ChatHeader() {
+const ChatHeader = () => {
+  const { selectedUser, setSelectedUser } = useChatStore();
+  const { onlineUsers } = useAuthStore();
+
   return (
-    <div
-      className="flex justify-between items-center bg-slate-800/50 border-b
-      border-slate-700/50 max-h-[84px] px-6 flex-1"
-    >
-      <div className="flex items-center space-x-3">
-        
-        {/* Avatar */}
-        <div className="avatar online">
-          <div className="w-12 rounded-full">
-            <img src="/avatar.png" alt="John Doe" />
+    <div className="p-2.5 border-b border-base-300">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {/* Avatar */}
+          <div className="avatar">
+            <div className="size-10 rounded-full relative">
+              <img src={selectedUser.profilePic || "/avatar.png"} alt={selectedUser.fullName} />
+            </div>
+          </div>
+
+          {/* User info */}
+          <div>
+            <h3 className="font-medium">{selectedUser.fullName}</h3>
+            <p className="text-sm text-base-content/70">
+              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+            </p>
           </div>
         </div>
 
-        {/* User Info */}
-        <div>
-          <h3 className="text-slate-200 font-medium">John Doe</h3>
-          <p className="text-slate-400 text-sm">Online</p>
-        </div>
+        {/* Close button */}
+        <button onClick={() => setSelectedUser(null)}>
+          <X />
+        </button>
       </div>
-
-      {/* Close Button */}
-      <button>
-        <XIcon className="w-5 h-5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer" />
-      </button>
     </div>
   );
-}
-
+};
 export default ChatHeader;
