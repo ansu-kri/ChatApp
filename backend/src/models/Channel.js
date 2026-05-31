@@ -21,7 +21,7 @@ const channelSchema = new mongoose.Schema(
             default: "public",
         },
         createdBy: {
-            type: mongooe.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
         },
@@ -65,4 +65,4 @@ const channelSchema = new mongoose.Schema(
 channelSchema.index({ name: 1 });
 channelSchema.index({ "members.user": 1 });
 
-module.exports = mongoose.Schema("Channel", channelSchema);
+module.exports = mongoose.model("Channel", channelSchema);

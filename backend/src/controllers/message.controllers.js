@@ -6,7 +6,7 @@ const { uploadToCloudinary } = require("../lib/cloudinary");
 const { asyncHandler } = require("../lib/errors");
 
 
-const MESSAGES_TTL = 60, // 1min cache for message pages
+const MESSAGES_TTL = 60; // 1min cache for message pages
 
 //Helper: cache key for channel messages page
 const msgCacheKey = (channelId, page, limit) => `message:channel:${channelId}:p${page}:${limit}`;
@@ -134,7 +134,7 @@ exports.sendChannelMessage = asyncHandler(async (req, res) => {
         redis.delPattern(`channels:user:*`),
     ]);
 
-    const populated = await message.populate("sender","fulname profilePic role");
+    const populated = await message.populate("sender","fullname profilePic role");
 
     io.to(channelId).emit("newMessage", Message.populated);
     res.status(201).json(populated);
@@ -170,7 +170,7 @@ exports.sendDMMessage = asyncHandler(async (req,res) => {
         ...fileData,
     })
 
-    const dmKey = [req,user._id.toString(), userId].sort().join(":");
+    const dmKey = [req.user._id.toString(), userId].sort().join(":");
     await redis.delPattern(`message:dm:${dmKey}:*`);
 
     const populated = await message.populate("sender", "fullname profilePic");
