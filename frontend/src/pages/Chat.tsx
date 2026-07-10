@@ -47,7 +47,7 @@ const [selectedGroup, setSelectedGroup] =
     if (users.length > 0 && !selectedUser) {
       setSelectedUser(null); // IMPORTANT: start empty
     }
-  }, [users]);
+  }, [users]);   
 
   if (isLoading) {
     return <div>Loading users...</div>;
